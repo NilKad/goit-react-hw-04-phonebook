@@ -76,3 +76,7 @@ const ContactForm = ({ onAddPhonebook }) => {
 };
 
 export default ContactForm;
+
+ContactForm.propTypes = {
+  onAddPhonebook: PropTypes.func.isRequired,
+};
