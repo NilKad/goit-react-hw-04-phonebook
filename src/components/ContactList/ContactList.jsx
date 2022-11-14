@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { ContactListItem } from './ContactListItem';
 
 export const ContactList = ({ contactList, onDeletePhonebookID }) => {
-  // console.log
   return (
     contactList.length > 0 && (
       <ul className={css.contactsList}>

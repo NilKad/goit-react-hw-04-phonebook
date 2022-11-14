@@ -1,92 +1,83 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 // import css from './Phonebook.module.css';
 import ContactForm from '../ContactForm/ContactForm';
 import { Filter } from '../Filter/Filter';
 import { ContactList } from 'components/ContactList/ContactList';
 
-class Phonebook extends React.Component {
-  defaultState = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-  };
+export default function Phonebook() {
+  const defaultContacts = [
+    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+  ];
 
-  state = {
-    contacts: [],
-    filter: '',
-  };
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState('');
 
-  componentDidMount() {
-    const readContact = JSON.parse(localStorage.getItem('contacts'));
-    if (!readContact || readContact.length === 0) {
-      this.setState({ contacts: this.defaultState.contacts });
+  const isFirstLoad = useRef(true);
+
+  useEffect(() => {
+    const readContacts = JSON.parse(localStorage.getItem('contacts'));
+    if (readContacts) {
+      setContacts(readContacts);
     } else {
-      this.setState({ contacts: readContact });
+      setContacts(defaultContacts);
     }
-  }
+  }, []);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
-      console.log('Contact update');
-      const prepareConatcts = JSON.stringify(this.state.contacts);
-      localStorage.setItem('contacts', prepareConatcts);
+  useEffect(() => {
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+      return;
     }
-  }
-  addToPhonebook = ({ id, name, number }) => {
-    if (this.state.contacts.find(el => el.name === name)) {
+    const prepareConatcts = JSON.stringify(contacts);
+    localStorage.setItem('contacts', prepareConatcts);
+  }, [contacts]);
+
+  const addToPhonebook = ({ id, name, number }) => {
+    if (contacts.find(el => el.name === name)) {
       alert(`${name} is arledy is contacts`);
       return false;
     }
-
-    this.setState(PrevState => {
-      return { contacts: [...PrevState.contacts, { id, name, number }] };
-    });
+    setContacts(p => [...p, { id, name, number }]);
     return true;
   };
 
-  filteredContactList = () => {
-    // console.log('this.state: ', this.state);
-    return this.state.contacts.filter(f => {
-      const filter = this.state.filter.toLowerCase();
-      return f.name.toLowerCase().includes(filter);
+  const filteredContactList = () => {
+    return contacts.filter(f => {
+      return f.name.toLowerCase().includes(filter.toLowerCase());
     });
   };
 
-  onInputHandle = e => {
-    const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
+  const onInputFilterHandle = e => {
+    const { value } = e.currentTarget;
+    setFilter(value);
   };
 
-  clearFilter = () => this.setState({ filter: '' });
+  const clearFilter = () => setFilter('');
 
-  deletePhonebookID = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(el => el.id !== id),
-    }));
+  const deletePhonebookID = id => {
+    setContacts(prevState => {
+      return prevState.filter(el => el.id !== id);
+    });
   };
 
-  render() {
-    return (
-      <div>
-        <h1>Phonebook</h1>
-        <ContactForm onAddPhonebook={this.addToPhonebook} />
-        <h2>Contacts</h2>
-        <Filter
-          onInputHandle={this.onInputHandle}
-          filterValue={this.state.filter}
-          clearFilter={this.clearFilter}
-        />
-        <ContactList
-          onDeletePhonebookID={this.deletePhonebookID}
-          contactList={this.filteredContactList()}
-          filterEl={this.state.filter}
-        />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h1>Phonebook</h1>
+      <ContactForm onAddPhonebook={addToPhonebook} />
+      <h2>Contacts</h2>
+      <Filter
+        onInputHandle={onInputFilterHandle}
+        filterValue={filter}
+        clearFilter={clearFilter}
+      />
+      <ContactList
+        onDeletePhonebookID={deletePhonebookID}
+        contactList={filteredContactList()}
+        filterEl={filter}
+      />
+    </div>
+  );
 }
-
-export default Phonebook;
