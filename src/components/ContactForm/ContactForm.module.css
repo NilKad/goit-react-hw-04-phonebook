@@ -1,0 +1,47 @@
+.phonebook {
+  /* display: block; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  width: 300px;
+  padding: 20px 10px;
+  border: 1px solid black;
+  /* background-color: red; */
+}
+
+.label {
+  display: block;
+  /* margin-bottom: px; */
+  margin-bottom: 15px;
+  /* margin-top: 15px; */
+}
+
+.input {
+  border: 1px solid grey;
+  display: block;
+  margin-top: 5px;
+  outline: none;
+  height: 18px;
+  border-radius: 2px;
+}
+
+.input:focus {
+  border-color: blue;
+  outline: 1px solid blue;
+}
+.input:invalid:focus {
+  border-color: red;
+  outline: 1px solid red;
+}
+
+.submitBtn {
+  margin-top: 25px;
+  border-radius: 4px;
+  /* display: inline-flex; */
+}
+
+.submitBtn:hover {
+  background-color: rgb(221, 221, 221);
+}
+.submitBtn:active {
+  background-color: deepskyblue;
+}

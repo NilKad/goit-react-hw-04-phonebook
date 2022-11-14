@@ -1,0 +1,13 @@
+button {
+  border: 1px solid grey;
+  background-color: white;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: rgb(205, 205, 205);
+}
+
+button:active {
+  background-color: deepskyblue;
+}

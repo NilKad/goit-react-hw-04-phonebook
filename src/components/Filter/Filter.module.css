@@ -1,0 +1,17 @@
+.input {
+  border: 1px solid grey;
+  display: block;
+  margin-top: 5px;
+  outline: none;
+  height: 18px;
+  border-radius: 2px;
+}
+
+.input:focus {
+  border-color: blue;
+  outline: 1px solid blue;
+}
+.input:invalid:focus {
+  border-color: red;
+  outline: 1px solid red;
+}
